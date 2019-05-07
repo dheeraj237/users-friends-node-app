@@ -13,8 +13,4 @@ connection.connect((err) => {
         console.log('[DB Connection] Connection Failed...\n', JSON.stringify(err));
 });
 
-// connection.query("Select * from users", (err, data) => {
-//     console.log(data)
-//     console.log(err)
-// });
 module.exports = connection;

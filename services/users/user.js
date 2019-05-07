@@ -4,7 +4,6 @@
 
 
 const express = require('express');
-// const User = require('../../models/user');
 const db = require('../../configs/db');
 
 const getUsers = async (req, res, next) => {
@@ -41,23 +40,6 @@ const getUsers = async (req, res, next) => {
             });
 
         }
-        // db.query("Select * from users", (err, users) => {
-        //     if (users.length > 0) {
-        //         return res.status(200).json({
-        //             'message': 'users fetched successfully',
-        //             'data': users
-        //         });
-        //     }
-        //     if (err) {
-        //         throw err
-        //     }
-
-        //     return res.status(404).json({
-        //         'code': 'BAD_REQUEST_ERROR',
-        //         'description': 'No users found in the system'
-        //     });
-        // });
-        // let users = await User.find({});
 
     } catch (error) {
         console.log(error)

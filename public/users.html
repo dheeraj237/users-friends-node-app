@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"><!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <title>Users List</title>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/users?page=1" class="brand-logo"><i class="material-icons">account_box</i>User-Friends</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="/users?page=1">Users</a></li>
+                <!-- <li><a href="friends.html">Friends</a></li> -->
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h3>Users</h3>
+        <!-- Page Content goes here -->
+        <div class="collection" id="usersDiv">
+
+        </div>
+        <ul class="pagination">
+            <li class="disabled"><a href="/users?page=1"><i class="material-icons">chevron_left</i></a></li>
+            <li class="active"><a href="/users?page=1">1</a></li>
+            <li class="waves-effect"><a href="/users?page=2">2</a></li>
+            <li class="waves-effect"><a href="/users?page=3">3</a></li>
+            <li class="waves-effect"><a href="/users?page=4">4</a></li>
+            <li class="waves-effect"><a href="/users?page=5">5</a></li>
+            <li class="waves-effect"><a href="/users?page=10"><i class="material-icons">chevron_right</i></a></li>
+        </ul>
+
+        <!-- <div id="usersDiv">
+
+        </div> -->
+    </div>
+</body>
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+    function loadDoc() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let page = urlParams.get('page');
+        if (!page) {
+            page = 1;
+        }
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let divData = '';
+                let div = `
+                <a href="[link]">
+                    <div class="collection-item">
+                        <div class="row valign-wrappers">
+                            <div class="col s2">
+                                <img src="[img]" alt="" class="circle responsive-img">
+                            </div>
+                            <div class="col s5">
+                                [usrFirtName]
+                            </div>
+                            <div class="col s5">
+                                [usrLastName]
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                `
+                let data = JSON.parse(this.responseText).data
+                console.log('this.responseText ', data);
+                data.forEach(usr => {
+                    divData += div.replace('[img]', usr.avatar).replace('[usrFirtName]', usr.firstName).replace('[usrLastName]', usr.lastName).replace('[link]', '/friends?id=' + usr.id)
+                });
+                document.getElementById("usersDiv").innerHTML = divData;
+            }
+        };
+        xhttp.open("GET", "/api/v1/users?page=" + page, true);
+        xhttp.send();
+    }
+    loadDoc();
+</script>
+
+</html>

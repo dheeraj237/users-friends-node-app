@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"><!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <title>Friends List</title>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/users?page=1" class="brand-logo"><i class="material-icons">account_circle</i>User-Friends</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="/users?page=1">Users</a></li>
+                <!-- <li><a href="friends.html">Friends</a></li> -->
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row valign-wrapper">
+            <a href="/users?page=1"><i class="material-icons">arrow_back</i></a>
+            &nbsp;<h5>Friends</h5>
+        </div>
+        <!-- Page Content goes here -->
+        <div id="usersDiv">
+
+        </div>
+    </div>
+</body>
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+    function loadDoc() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const fid = urlParams.get('id');
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                let divData = '';
+                let div = `<a href="[link]"><div class="col s12 m8 offset-m2 l6 offset-l3">
+                            <div class="card-panel grey lighten-5 z-depth-1">
+                            <div class="row valign-wrapper">
+                                <div class="col s2">
+                                <img src="[img]" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->
+                                </div>
+                                <div class="col s10">
+                                <span class="black-text">
+                                    [usr]
+                                </span>
+                                </div>
+                            </div>
+                            </div>
+                        </div></a>`
+                let data = JSON.parse(this.responseText).data
+                console.log('this.responseText ', data);
+                data.forEach(usr => {
+                    divData += div.replace('[img]', usr.avatar).replace('[usr]', usr.firstName).replace('[link]', '/friends?id=' + usr.id)
+                });
+                if (data.length === 0) {
+                    divData = "No Data Found"
+                }
+                document.getElementById("usersDiv").innerHTML = divData;
+            }
+        };
+        xhttp.open("GET", "/api/v1/users/friends/" + fid, true);
+        xhttp.send();
+    }
+    loadDoc();
+</script>
+
+</html>
